@@ -115,10 +115,10 @@ jobs:
       DEPLOY_TITILER_CMR: ${{ github.event.inputs.DEPLOY_TITILER_CMR }}
     secrets: inherit
 
-  update-deployment-status:
-    name: Update Deployment Status
-    uses: "./.github/workflows/update_deployment_status.yml"
-    needs: deploy-veda-components
-    with:
-      environment: ${{ github.event.inputs.environment }}
-    secrets: inherit
+  # update-deployment-status:
+  #   name: Update Deployment Status
+  #   uses: "./.github/workflows/update_deployment_status.yml"
+  #   needs: deploy-veda-components
+  #   with:
+  #     environment: ${{ github.event.inputs.environment }}
+  #   secrets: inherit
