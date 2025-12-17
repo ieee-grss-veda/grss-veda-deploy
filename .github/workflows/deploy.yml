@@ -307,12 +307,21 @@ jobs:
           role-session-name: "gh-${{ env.ENVIRONMENT }}-monitoring-deployment"
           aws-region: "${{ env.AWS_REGION }}"
 
-      - name: Run deployment
-        uses: "./veda-monitoring/.github/workflows/deploy"
+      - name: Set up Python
+        uses: actions/setup-python@b64ffcaf5b410884ad320a9cfac8866006a109aa #v4.8.0
         with:
-          env_aws_secret_name: ${{ vars.DEPLOYMENT_ENV_SECRET_NAME }}
-          dir: "${{ env.DIRECTORY }}"
-          script_path: "${{ github.workspace }}/scripts/generate_env_file.py"
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        working-directory: ${{ env.DIRECTORY }}
+        run: pip install -r requirements.txt
+
+      - name: Run deployment
+        working-directory: ${{ env.DIRECTORY }}
+        run: |
+          npx cdk deploy GRSS-VEDA-grafana-${{ vars.STAGE }} \
+            --require-approval never
 
   deploy-titiler-multidim:
       name: Deploy titiler-multidim 🌎
