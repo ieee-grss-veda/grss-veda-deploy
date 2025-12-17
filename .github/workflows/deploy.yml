@@ -308,7 +308,7 @@ jobs:
           aws-region: "${{ env.AWS_REGION }}"
 
       - name: Run deployment
-        uses: "./veda-monitoring/.github/workflows"
+        uses: "./veda-monitoring/.github/workflows/deploy"
         with:
           env_aws_secret_name: ${{ vars.DEPLOYMENT_ENV_SECRET_NAME }}
           dir: "${{ env.DIRECTORY }}"
