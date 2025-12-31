@@ -342,8 +342,7 @@ jobs:
           STAGE: ${{ inputs.environment }}
           PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
-          KC_CONFIG_SECRET_ARN=${{ vars.KC_CONFIG_SECRET_ARN }}
-          # HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
+          KC_CONFIG_SECRET_ARN: ${{ vars.KC_CONFIG_SECRET_ARN }}
         run: |
           cdk deploy GRSS-VEDA-grafana-${{ inputs.environment }} \
             --require-approval never
