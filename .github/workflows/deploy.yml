@@ -325,8 +325,25 @@ jobs:
       - name: Install CDK
         run: npm install -g aws-cdk
 
-      - name: Run deployment
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          VPC_ID=${{ vars.VPC_ID }}
+          PERMISSIONS_BOUNDARY_ARN=${{ vars.PERMISSIONS_BOUNDARY_ARN }}
+          STAGE=${{ vars.STAGE }}
+          PROJECT_NAME=${{ vars.PROJECT_NAME }}
+          KC_CONFIG_SECRET_ARN=${{ vars.KC_CONFIG_SECRET_ARN }}
+          EOF
+
+      - name: Run deployment (mirroring submodule workflow)
         working-directory: ${{ env.DIRECTORY }}
+        env:
+          VPC_ID: ${{ vars.VPC_ID }}
+          STAGE: ${{ inputs.environment }}
+          PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          KC_CONFIG_SECRET_ARN=${{ vars.KC_CONFIG_SECRET_ARN }}
+          # HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: |
           cdk deploy GRSS-VEDA-grafana-${{ inputs.environment }} \
             --require-approval never
