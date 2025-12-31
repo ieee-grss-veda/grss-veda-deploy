@@ -333,6 +333,8 @@ jobs:
           STAGE=${{ vars.STAGE }}
           PROJECT_NAME=${{ vars.PROJECT_NAME }}
           KC_CONFIG_SECRET_ARN=${{ vars.KC_CONFIG_SECRET_ARN }}
+          CLOUDFRONT_CERTIFICATE_ARN=${{ vars.CLOUDFRONT_CERTIFICATE_ARN }}
+          GRAFANA_CERTIFICATE_ARN=${{ vars.GRAFANA_CERTIFICATE_ARN }}
           EOF
 
       - name: Run deployment (mirroring submodule workflow)
@@ -343,6 +345,8 @@ jobs:
           PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           KC_CONFIG_SECRET_ARN: ${{ vars.KC_CONFIG_SECRET_ARN }}
+          CLOUDFRONT_CERTIFICATE_ARN: ${{ vars.CLOUDFRONT_CERTIFICATE_ARN }}
+          GRAFANA_CERTIFICATE_ARN: ${{ vars.GRAFANA_CERTIFICATE_ARN }}
         run: |
           cdk deploy GRSS-VEDA-grafana-${{ inputs.environment }} \
             --require-approval never
