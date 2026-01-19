@@ -8,7 +8,7 @@ DEPLOYMENT_FILE = "deployment-status.md"
 
 # component_id, DEPLOY_* env, VEDA_*_GIT_REF env, display name in MD, repo URL
 COMPONENTS = [
-    ("auth", "DEPLOY_AUTH", "VEDA_AUTH_GIT_REF", "AUTH", "https://github.com/NASA-IMPACT/veda-auth"),
+    ("auth", "DEPLOY_AUTH", "VEDA_AUTH_GIT_REF", "AUTH", "https://github.com/ieee-grss-veda/grss-veda-keycloak"),
     ("backend", "DEPLOY_BACKEND", "VEDA_BACKEND_GIT_REF", "BACKEND", "https://github.com/NASA-IMPACT/veda-backend"),
     ("features_api", "DEPLOY_FEATURES_API", "VEDA_FEATURES_API_GIT_REF", "FEATURES_API", "https://github.com/NASA-IMPACT/veda-features-api-cdk"),
     ("routes", "DEPLOY_ROUTES", "VEDA_ROUTES_GIT_REF", "ROUTES", "https://github.com/NASA-IMPACT/veda-routes"),

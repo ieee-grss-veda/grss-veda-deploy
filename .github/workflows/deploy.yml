@@ -68,7 +68,7 @@ run-name: Deploy to ${{ inputs.environment }} environment by @${{ github.actor }
 jobs:
 
   deploy-veda-auth:
-    name: Deploy VEDA auth 🔐
+    name: Deploy VEDA Keycloak 🔐
     runs-on: ubuntu-latest
     env:
       DIRECTORY: veda-auth
@@ -83,10 +83,10 @@ jobs:
           lfs: "true"
           submodules: "false"
 
-      - name: Checkout veda-auth submodule
+      - name: Checkout veda-keycloak submodule
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          repository: "NASA-IMPACT/${{ env.DIRECTORY }}"
+          repository: "ieee-grss-veda/grss-veda-keycloak"
           path: ${{ env.DIRECTORY }}
           ref: ${{ vars.VEDA_AUTH_GIT_REF || 'main'}}
 
@@ -96,13 +96,15 @@ jobs:
           role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
           role-session-name: "gh-${{ env.ENVIRONMENT }}-auth-deployment"
           aws-region: "us-west-2"
+          role-duration-seconds: 3600
 
-      - name: Run auth deployment
+      - name: Run keycloak deployment
         id: deploy_auth_stack
         uses: "./veda-auth/.github/actions/cdk-deploy"
         with:
           dir: "${{ env.DIRECTORY }}"
           env_aws_secret_name: ${{ vars.VEDA_AUTH_DEPLOYMENT_SECRET || vars.DEPLOYMENT_ENV_SECRET_NAME }}
+          script_path: "${{ github.workspace }}/scripts/generate_env_file.py"
 
       - name: Get Auth Stack Name
         id: get_auth_stack
