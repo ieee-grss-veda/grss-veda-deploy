@@ -73,6 +73,31 @@ jobs:
     env:
       DIRECTORY: veda-auth
       ENVIRONMENT: ${{ inputs.environment }}
+      # Keycloak CDK configuration
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-west-2' }}
+      CDK_BOOTSTRAP_QUALIFIER: ${{ vars.CDK_BOOTSTRAP_QUALIFIER }}
+      VPC_ID: ${{ vars.VPC_ID }}
+      PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
+      HOSTNAME: ${{ vars.VEDA_AUTH_HOSTNAME }}
+      SSL_CERTIFICATE_ARN: ${{ vars.VEDA_AUTH_SSL_CERTIFICATE_ARN }}
+      STAGE: ${{ inputs.environment }}
+      KEYCLOAK_VERSION: ${{ vars.KEYCLOAK_VERSION }}
+      KEYCLOAK_CONFIG_CLI_VERSION: ${{ vars.KEYCLOAK_CONFIG_CLI_VERSION }}
+      CONFIGURE_ROUTE53: ${{ vars.CONFIGURE_ROUTE53 }}
+      HOSTED_ZONE_DOMAIN: ${{ vars.HOSTED_ZONE_DOMAIN }}
+      # Identity Provider secrets (environment-specific)
+      IDP_SECRET_ARN_GH: ${{ vars.IDP_SECRET_ARN_GH }}
+      IDP_SECRET_ARN_VEDA_GH: ${{ vars.IDP_SECRET_ARN_VEDA_GH }}
+      VEDA_SAML_SECRET_ARN: ${{ vars.VEDA_SAML_SECRET_ARN }}
+      RDS_SNAPSHOT_IDENTIFIER: ${{ vars.RDS_SNAPSHOT_IDENTIFIER }}
+      # Client URLs for OAuth redirect configuration
+      STAC_CLIENT_URL: ${{ vars.STAC_CLIENT_URL }}
+      INGEST_API_CLIENT_URL: ${{ vars.INGEST_API_CLIENT_URL }}
+      INGEST_UI_CLIENT_URL: ${{ vars.INGEST_UI_CLIENT_URL }}
+      AIRFLOW_CLIENT_URL: ${{ vars.AIRFLOW_CLIENT_URL }}
+      JUPYTERHUB_CLIENT_URL: ${{ vars.JUPYTERHUB_CLIENT_URL }}
+      MONITORING_CLIENT_URL: ${{ vars.MONITORING_CLIENT_URL }}
     environment: ${{ inputs.environment }}
     if: ${{ inputs.DEPLOY_AUTH == 'true' }}
 
@@ -105,6 +130,7 @@ jobs:
           dir: "${{ env.DIRECTORY }}"
           env_aws_secret_name: ${{ vars.VEDA_AUTH_DEPLOYMENT_SECRET || vars.DEPLOYMENT_ENV_SECRET_NAME }}
           script_path: "${{ github.workspace }}/scripts/generate_env_file.py"
+          config_vars_json: ${{ toJSON(vars) }}
 
       - name: Get Auth Stack Name
         id: get_auth_stack
