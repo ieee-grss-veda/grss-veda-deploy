@@ -91,6 +91,14 @@ jobs:
       IDP_SECRET_ARN_VEDA_GH: ${{ vars.IDP_SECRET_ARN_VEDA_GH }}
       VEDA_SAML_SECRET_ARN: ${{ vars.VEDA_SAML_SECRET_ARN }}
       RDS_SNAPSHOT_IDENTIFIER: ${{ vars.RDS_SNAPSHOT_IDENTIFIER }}
+      # Resource sizing (optional overrides - defaults to lower resources for dev/staging)
+      ECS_CPU: ${{ vars.ECS_CPU }}
+      ECS_MEMORY_MIB: ${{ vars.ECS_MEMORY_MIB }}
+      RDS_INSTANCE_CLASS: ${{ vars.RDS_INSTANCE_CLASS }}
+      RDS_INSTANCE_SIZE: ${{ vars.RDS_INSTANCE_SIZE }}
+      ECS_HEALTH_CHECK_GRACE_PERIOD: ${{ vars.ECS_HEALTH_CHECK_GRACE_PERIOD }}
+      # csv of whitelisted emails
+      SSO_EMAIL_WHITELIST: ${{ vars.SSO_EMAIL_WHITELIST }}
       # Client URLs for OAuth redirect configuration
       STAC_CLIENT_URL: ${{ vars.STAC_CLIENT_URL }}
       INGEST_API_CLIENT_URL: ${{ vars.INGEST_API_CLIENT_URL }}
