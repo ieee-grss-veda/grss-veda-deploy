@@ -68,11 +68,44 @@ run-name: Deploy to ${{ inputs.environment }} environment by @${{ github.actor }
 jobs:
 
   deploy-veda-auth:
-    name: Deploy VEDA auth 🔐
+    name: Deploy VEDA Keycloak 🔐
     runs-on: ubuntu-latest
     env:
       DIRECTORY: veda-auth
       ENVIRONMENT: ${{ inputs.environment }}
+      # Keycloak CDK configuration
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-west-2' }}
+      CDK_BOOTSTRAP_QUALIFIER: ${{ vars.CDK_BOOTSTRAP_QUALIFIER }}
+      VPC_ID: ${{ vars.VPC_ID }}
+      PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
+      HOSTNAME: ${{ vars.VEDA_AUTH_HOSTNAME }}
+      SSL_CERTIFICATE_ARN: ${{ vars.VEDA_AUTH_SSL_CERTIFICATE_ARN }}
+      STAGE: ${{ vars.STAGE || inputs.environment }}
+      KEYCLOAK_VERSION: ${{ vars.KEYCLOAK_VERSION }}
+      KEYCLOAK_CONFIG_CLI_VERSION: ${{ vars.KEYCLOAK_CONFIG_CLI_VERSION }}
+      CONFIGURE_ROUTE53: ${{ vars.CONFIGURE_ROUTE53 }}
+      HOSTED_ZONE_DOMAIN: ${{ vars.HOSTED_ZONE_DOMAIN }}
+      # Identity Provider secrets (environment-specific)
+      IDP_SECRET_ARN_GH: ${{ vars.IDP_SECRET_ARN_GH }}
+      IDP_SECRET_ARN_VEDA_GH: ${{ vars.IDP_SECRET_ARN_VEDA_GH }}
+      VEDA_SAML_SECRET_ARN: ${{ vars.VEDA_SAML_SECRET_ARN }}
+      RDS_SNAPSHOT_IDENTIFIER: ${{ vars.RDS_SNAPSHOT_IDENTIFIER }}
+      # Resource sizing (optional overrides - defaults to lower resources for dev/staging)
+      ECS_CPU: ${{ vars.ECS_CPU }}
+      ECS_MEMORY_MIB: ${{ vars.ECS_MEMORY_MIB }}
+      RDS_INSTANCE_CLASS: ${{ vars.RDS_INSTANCE_CLASS }}
+      RDS_INSTANCE_SIZE: ${{ vars.RDS_INSTANCE_SIZE }}
+      ECS_HEALTH_CHECK_GRACE_PERIOD: ${{ vars.ECS_HEALTH_CHECK_GRACE_PERIOD }}
+      # csv of whitelisted emails
+      SSO_EMAIL_WHITELIST: ${{ vars.SSO_EMAIL_WHITELIST }}
+      # Client URLs for OAuth redirect configuration
+      STAC_CLIENT_URL: ${{ vars.STAC_CLIENT_URL }}
+      INGEST_API_CLIENT_URL: ${{ vars.INGEST_API_CLIENT_URL }}
+      INGEST_UI_CLIENT_URL: ${{ vars.INGEST_UI_CLIENT_URL }}
+      AIRFLOW_CLIENT_URL: ${{ vars.AIRFLOW_CLIENT_URL }}
+      JUPYTERHUB_CLIENT_URL: ${{ vars.JUPYTERHUB_CLIENT_URL }}
+      MONITORING_CLIENT_URL: ${{ vars.MONITORING_CLIENT_URL }}
     environment: ${{ inputs.environment }}
     if: ${{ inputs.DEPLOY_AUTH == 'true' }}
 
@@ -83,10 +116,10 @@ jobs:
           lfs: "true"
           submodules: "false"
 
-      - name: Checkout veda-auth submodule
+      - name: Checkout veda-keycloak submodule
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          repository: "NASA-IMPACT/${{ env.DIRECTORY }}"
+          repository: "ieee-grss-veda/grss-veda-keycloak"
           path: ${{ env.DIRECTORY }}
           ref: ${{ vars.VEDA_AUTH_GIT_REF || 'main'}}
 
@@ -96,13 +129,16 @@ jobs:
           role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
           role-session-name: "gh-${{ env.ENVIRONMENT }}-auth-deployment"
           aws-region: "us-west-2"
+          role-duration-seconds: 3600
 
-      - name: Run auth deployment
+      - name: Run keycloak deployment
         id: deploy_auth_stack
         uses: "./veda-auth/.github/actions/cdk-deploy"
         with:
           dir: "${{ env.DIRECTORY }}"
           env_aws_secret_name: ${{ vars.VEDA_AUTH_DEPLOYMENT_SECRET || vars.DEPLOYMENT_ENV_SECRET_NAME }}
+          script_path: "${{ github.workspace }}/scripts/generate_env_file.py"
+          config_vars_json: ${{ toJSON(vars) }}
 
       - name: Get Auth Stack Name
         id: get_auth_stack

@@ -113,7 +113,7 @@ To keep the components modular, each action should include all necessary steps f
 > Most deployments require [custom environment configuration](#store-env-configuration-in-aws-secrets-manager) that can be retrieved from the AWS Secrets Manager for the deployment. See [veda-backend/scripts/get-env.sh](https://github.com/NASA-IMPACT/veda-backend/blob/develop/scripts/get-env.sh) for an example environment configuration utility.
 
 ### Examples
-- Veda-auth [cdk-deploy/action.yml](https://github.com/NASA-IMPACT/veda-auth/blob/main/.github/actions/cdk-deploy/action.yml) provides a simple example of adding configuration from an AWS Secrets Manager secret and running `cdk deploy` for an imported submodule.
+- Veda-keycloak [grss-veda-keycloak](https://github.com/ieee-grss-veda/grss-veda-keycloak) provides Keycloak-based authentication with CDK deployment and post-deployment configuration via Lambda.
 - Veda-backend [cdk-deploy/action.yml](https://github.com/NASA-IMPACT/veda-backend/blob/develop/.github/actions/cdk-deploy/action.yml) contains logic to run tests before deploying components.
 - This [CICD workflow in veda-backend](https://github.com/NASA-IMPACT/veda-backend/blob/develop/.github/workflows/cicd.yml) demonstrates importing the cdk-deploy/action on a merge event to test the deployment in a dev enviornment.
 

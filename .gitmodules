@@ -3,7 +3,7 @@
         url = https://github.com/ieee-grss-veda/grss-veda-data-airflow.git
 [submodule "veda-auth"]
         path = veda-auth
-        url = https://github.com/NASA-IMPACT/veda-auth.git
+        url = https://github.com/ieee-grss-veda/grss-veda-keycloak.git
 [submodule "veda-backend"]
         path = veda-backend
         url = https://github.com/NASA-IMPACT/veda-backend.git
