@@ -81,7 +81,7 @@ jobs:
       PERMISSIONS_BOUNDARY_ARN: ${{ vars.PERMISSIONS_BOUNDARY_ARN }}
       HOSTNAME: ${{ vars.VEDA_AUTH_HOSTNAME }}
       SSL_CERTIFICATE_ARN: ${{ vars.VEDA_AUTH_SSL_CERTIFICATE_ARN }}
-      STAGE: ${{ inputs.environment }}
+      STAGE: ${{ vars.STAGE || inputs.environment }}
       KEYCLOAK_VERSION: ${{ vars.KEYCLOAK_VERSION }}
       KEYCLOAK_CONFIG_CLI_VERSION: ${{ vars.KEYCLOAK_CONFIG_CLI_VERSION }}
       CONFIGURE_ROUTE53: ${{ vars.CONFIGURE_ROUTE53 }}
