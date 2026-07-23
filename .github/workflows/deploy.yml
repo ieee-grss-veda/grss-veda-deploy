@@ -387,7 +387,7 @@ jobs:
           GRAFANA_CERTIFICATE_ARN: ${{ vars.GRAFANA_CERTIFICATE_ARN }}
           GRAFANA_DOMAIN_NAME: ${{ vars.GRAFANA_DOMAIN_NAME }}
         run: |
-          cdk deploy GRSS-VEDA-grafana-${{ inputs.environment }} \
+          cdk deploy --all \
             --require-approval never
 
   deploy-titiler-multidim:
