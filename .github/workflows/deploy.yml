@@ -390,7 +390,7 @@ jobs:
         run: |
           cdk deploy \
             "${{ vars.PROJECT_NAME }}-grafana-${{ vars.STAGE }}" \
-            "${{ vars.PROJECT_NAME }}-rum-${{ vars.STAGE }}" \
+            "${{ vars.PROJECT_NAME }}-access-logs-${{ vars.STAGE }}" \
             --require-approval never
 
   deploy-titiler-multidim:
